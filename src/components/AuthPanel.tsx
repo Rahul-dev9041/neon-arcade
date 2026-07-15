@@ -13,12 +13,14 @@ export function AuthPanel({
   onSignup,
   onLogin,
   onLogout,
+  onDelete,
 }: {
   user: AuthUser | null;
   isLoading: boolean;
   onSignup: (username: string, email: string, password: string) => Promise<void>;
   onLogin: (identifier: string, password: string) => Promise<void>;
   onLogout: () => Promise<void>;
+  onDelete: (password: string) => Promise<void>;
 }) {
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [username, setUsername] = useState("");
@@ -27,6 +29,9 @@ export function AuthPanel({
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [deletePassword, setDeletePassword] = useState("");
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -74,9 +79,70 @@ export function AuthPanel({
         <p className="text-xs" style={{ color: "var(--ink-dim)" }}>
           your best run each day lands on the leaderboard · top 3 gets a celebration
         </p>
-        <button type="button" className="btn-ghost text-xs self-start" onClick={onLogout}>
-          sign out
-        </button>
+        <div className="flex items-center gap-3">
+          <button type="button" className="btn-ghost text-xs" onClick={onLogout}>
+            sign out
+          </button>
+          <button
+            type="button"
+            className="btn-ghost text-xs"
+            style={{ color: "#ff5ea8", borderColor: "rgba(255,94,168,0.4)" }}
+            onClick={() => {
+              setDeleteOpen((v) => !v);
+              setDeleteError(null);
+              setDeletePassword("");
+            }}
+          >
+            delete account
+          </button>
+        </div>
+        {deleteOpen && (
+          <form
+            className="flex flex-col gap-2 p-3 rounded-md"
+            style={{ border: "1px solid rgba(255,94,168,0.4)" }}
+            onSubmit={async (e) => {
+              e.preventDefault();
+              if (busy) return;
+              setBusy(true);
+              setDeleteError(null);
+              try {
+                await onDelete(deletePassword);
+              } catch (err) {
+                setDeleteError(err instanceof Error ? err.message : "Something went wrong.");
+              } finally {
+                setBusy(false);
+              }
+            }}
+          >
+            <p className="text-xs" style={{ color: "#ff5ea8" }}>
+              This permanently erases your account, sessions, and every
+              leaderboard entry on both arcade sites. There is no undo.
+            </p>
+            <input
+              type="password"
+              value={deletePassword}
+              placeholder="confirm your password"
+              autoComplete="current-password"
+              required
+              className="bg-transparent border rounded-md px-3 py-2 text-sm outline-none w-full"
+              style={{ borderColor: "rgba(255,94,168,0.4)", color: "var(--ink)" }}
+              onChange={(e) => setDeletePassword(e.target.value)}
+            />
+            <button
+              type="submit"
+              className="btn-ghost text-xs"
+              style={{ color: "#ff5ea8", borderColor: "#ff5ea8" }}
+              disabled={busy}
+            >
+              {busy ? "…" : "permanently delete everything"}
+            </button>
+            {deleteError && (
+              <p className="text-xs" style={{ color: "#ff5ea8" }}>
+                {deleteError}
+              </p>
+            )}
+          </form>
+        )}
       </div>
     );
   }

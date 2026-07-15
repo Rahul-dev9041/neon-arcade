@@ -22,7 +22,7 @@ export function GamePage({
   game: GameDef;
   GameComponent: ComponentType<GameProps>;
 }) {
-  const { user, isLoading, signup, login, logout } = useAuth();
+  const { user, isLoading, signup, login, logout, deleteAccount } = useAuth();
   const { submitScore } = useSubmitScore(game.slug);
   const [celebration, setCelebration] = useState<{ rank: number; score: number } | null>(null);
 
@@ -89,6 +89,7 @@ export function GamePage({
             onSignup={signup}
             onLogin={login}
             onLogout={logout}
+            onDelete={deleteAccount}
           />
           <Leaderboard game={game.slug} />
         </div>

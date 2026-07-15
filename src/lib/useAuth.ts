@@ -50,5 +50,16 @@ export function useAuth() {
     setUser(null);
   }, []);
 
-  return { user, isLoading, signup, login, logout };
+  const deleteAccount = useCallback(async (password: string) => {
+    const res = await fetch("/api/auth/delete", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password }),
+    });
+    const json = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(json.error ?? "Something went wrong.");
+    setUser(null);
+  }, []);
+
+  return { user, isLoading, signup, login, logout, deleteAccount };
 }
