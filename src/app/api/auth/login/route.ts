@@ -21,6 +21,9 @@ type LoginBody = { identifier?: string; password?: string };
 const MAX_ATTEMPTS_PER_IDENTIFIER = 10;
 const MAX_ATTEMPTS_PER_IP = 30;
 const ATTEMPT_WINDOW_SECONDS = 15 * 60;
+// Short-window burst cap: the 15-minute windows above still allowed 30
+// rapid-fire guesses; this holds the floor at ~8/minute per IP.
+const MAX_ATTEMPTS_PER_IP_PER_MINUTE = 8;
 
 export async function POST(request: Request) {
   let body: LoginBody;
@@ -47,11 +50,12 @@ export async function POST(request: Request) {
   // distributed attack) and per-IP (stops one machine spraying guesses
   // across many identifiers).
   const ip = await clientIp();
-  const [identifierOk, ipOk] = await Promise.all([
+  const [identifierOk, ipOk, burstOk] = await Promise.all([
     rateLimit(`login:id:${identifier}`, MAX_ATTEMPTS_PER_IDENTIFIER, ATTEMPT_WINDOW_SECONDS),
     rateLimit(`login:ip:${ip}`, MAX_ATTEMPTS_PER_IP, ATTEMPT_WINDOW_SECONDS),
+    rateLimit(`login:burst:${ip}`, MAX_ATTEMPTS_PER_IP_PER_MINUTE, 60),
   ]);
-  if (!identifierOk || !ipOk) {
+  if (!identifierOk || !ipOk || !burstOk) {
     return NextResponse.json(
       { error: "Too many login attempts. Try again in a few minutes." },
       { status: 429 },
