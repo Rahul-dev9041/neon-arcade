@@ -128,6 +128,16 @@ export const GAMES: GameDef[] = [
     minMsPerPoint: 200,
   },
   {
+    slug: "bounce",
+    name: "Bounce",
+    tagline: "auto-jump · climb forever",
+    color: "#60a5fa",
+    controls: "arrows / A D · hold left or right half of the screen",
+    // Score = height climbed / 10px; each ~600ms bounce gains a few points.
+    maxPlausibleScore: 10000,
+    minMsPerPoint: 40,
+  },
+  {
     slug: "echo",
     name: "Echo",
     tagline: "watch · listen · repeat the pattern",
