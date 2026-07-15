@@ -77,6 +77,66 @@ export const GAMES: GameDef[] = [
     maxPlausibleScore: 2000,
     minMsPerPoint: 90,
   },
+  {
+    slug: "stax",
+    name: "Stax",
+    tagline: "stack falling blocks · clear lines",
+    color: "#f43f5e",
+    controls: "arrows to move / rotate · space to drop · on-screen pad",
+    // Line points (100–800 per clear); even perfect play can't out-earn this.
+    maxPlausibleScore: 200000,
+    minMsPerPoint: 6,
+  },
+  {
+    slug: "pop",
+    name: "Pop",
+    tagline: "aim · shoot · burst the bubbles",
+    color: "#22d3ee",
+    controls: "aim with pointer · tap / click to shoot",
+    // Points per popped/dropped bubble; a shot resolves at most ~once a second.
+    maxPlausibleScore: 5000,
+    minMsPerPoint: 25,
+  },
+  {
+    slug: "mines",
+    name: "Mines",
+    tagline: "sweep the grid · don't click the boom",
+    color: "#fb923c",
+    controls: "tap to reveal · flag mode for marking mines",
+    // One point per safe cell; flood fills reveal many cells per click.
+    maxPlausibleScore: 3000,
+    minMsPerPoint: 4,
+  },
+  {
+    slug: "tictactoe",
+    name: "Tic-Tac-Toe",
+    tagline: "beat the machine · streak it",
+    color: "#5eead4",
+    controls: "tap a cell — X is you, streak wins vs the AI",
+    // One point per win; a win needs at least five alternating moves.
+    maxPlausibleScore: 100,
+    minMsPerPoint: 1200,
+  },
+  {
+    slug: "boxes",
+    name: "Dots & Boxes",
+    tagline: "close boxes · out-draw the AI",
+    color: "#eab308",
+    controls: "tap an edge to draw it — complete a box for another turn",
+    // One point per captured box; every box needs at least one deliberate move.
+    maxPlausibleScore: 600,
+    minMsPerPoint: 200,
+  },
+  {
+    slug: "echo",
+    name: "Echo",
+    tagline: "watch · listen · repeat the pattern",
+    color: "#e879f9",
+    controls: "tap the pads in the order they light up",
+    // One point per round; round n replays an n-step sequence first.
+    maxPlausibleScore: 150,
+    minMsPerPoint: 350,
+  },
 ];
 
 export function getGame(slug: string): GameDef | undefined {

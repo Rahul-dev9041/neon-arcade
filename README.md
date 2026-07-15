@@ -2,8 +2,8 @@
 
 ![Neon Arcade](public/hero.png)
 
-Five free browser games, one account, per-game daily leaderboards, and top-3
-celebrations — all in a synthwave terminal aesthetic.
+Eleven free browser games, one account, per-game daily leaderboards, and
+top-3 celebrations — all in a synthwave terminal aesthetic.
 
 | Game | Hook |
 | --- | --- |
@@ -12,6 +12,12 @@ celebrations — all in a synthwave terminal aesthetic.
 | **Blocks** | 2048-style merge puzzle |
 | **Reflex** | stop the marker in a shrinking zone |
 | **Bricks** | one-ball, one-life breakout |
+| **Stax** | falling tetrominoes — clear lines |
+| **Pop** | bubble shooter with drop bonuses |
+| **Mines** | minesweeper with safe first tap + levels |
+| **Tic-Tac-Toe** | streak wins vs an imperfect AI |
+| **Dots & Boxes** | out-draw a greedy AI, bank your boxes |
+| **Echo** | Simon-style pattern memory with sound |
 
 ## Architecture
 
