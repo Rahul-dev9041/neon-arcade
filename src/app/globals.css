@@ -1,0 +1,214 @@
+@import "tailwindcss";
+
+:root {
+  --void: #05060a;
+  --void-raised: #0a0d14;
+  --glass: rgba(15, 20, 30, 0.55);
+  --glass-border: rgba(120, 255, 210, 0.14);
+  --neon-green: #39ff9c;
+  --neon-green-dim: #1f9b62;
+  --neon-cyan: #35e5ff;
+  --neon-cyan-dim: #1a7f8f;
+  --ink: #d8fff0;
+  --ink-dim: #7c9490;
+  --danger: #ff3b5c;
+
+  --background: var(--void);
+  --foreground: var(--ink);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-mono: var(--font-jetbrains-mono);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background:
+    radial-gradient(circle at 15% 10%, rgba(53, 229, 255, 0.06), transparent 40%),
+    radial-gradient(circle at 85% 90%, rgba(57, 255, 156, 0.06), transparent 45%),
+    var(--void);
+  color: var(--foreground);
+  font-family: var(--font-jetbrains-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
+  letter-spacing: 0.01em;
+  min-height: 100%;
+}
+
+::selection {
+  background: var(--neon-green);
+  color: var(--void);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--void);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--neon-green-dim);
+  border-radius: 4px;
+}
+
+/* Nightglass frosted-glass terminal panel */
+.glass-panel {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 14px;
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  box-shadow:
+    0 0 0 1px rgba(53, 229, 255, 0.03) inset,
+    0 8px 40px rgba(0, 0, 0, 0.55);
+}
+
+.neon-text-green {
+  color: var(--neon-green);
+  text-shadow: 0 0 6px rgba(57, 255, 156, 0.65), 0 0 18px rgba(57, 255, 156, 0.25);
+}
+
+.neon-text-cyan {
+  color: var(--neon-cyan);
+  text-shadow: 0 0 6px rgba(53, 229, 255, 0.65), 0 0 18px rgba(53, 229, 255, 0.25);
+}
+
+.neon-border-green {
+  border: 1px solid var(--neon-green-dim);
+  box-shadow:
+    0 0 8px rgba(57, 255, 156, 0.35),
+    0 0 24px rgba(57, 255, 156, 0.12),
+    inset 0 0 12px rgba(57, 255, 156, 0.06);
+}
+
+.neon-border-cyan {
+  border: 1px solid var(--neon-cyan-dim);
+  box-shadow:
+    0 0 8px rgba(53, 229, 255, 0.35),
+    0 0 24px rgba(53, 229, 255, 0.12),
+    inset 0 0 12px rgba(53, 229, 255, 0.06);
+}
+
+.terminal-label {
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.68rem;
+  color: var(--ink-dim);
+}
+
+.btn-neon {
+  position: relative;
+  font-family: inherit;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--void);
+  background: linear-gradient(135deg, var(--neon-green), var(--neon-cyan));
+  border: none;
+  border-radius: 10px;
+  padding: 0.85rem 1.4rem;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+  box-shadow: 0 0 18px rgba(57, 255, 156, 0.35), 0 0 36px rgba(53, 229, 255, 0.18);
+}
+
+.btn-neon:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 0 24px rgba(57, 255, 156, 0.55), 0 0 48px rgba(53, 229, 255, 0.3);
+}
+
+.btn-neon:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.btn-ghost {
+  font-family: inherit;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.75rem;
+  color: var(--neon-cyan);
+  background: rgba(53, 229, 255, 0.06);
+  border: 1px solid var(--neon-cyan-dim);
+  border-radius: 10px;
+  padding: 0.7rem 1.2rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background: rgba(53, 229, 255, 0.14);
+}
+
+.btn-ghost:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/*
+ * Game page layout: mobile-first single-column stack in DOM order
+ * (game -> sessions -> leaderboard). At md+ this becomes a two-column grid
+ * with named areas, so the *visual* desktop arrangement (game spanning the
+ * left column; sessions/leaderboard stacked on the right) is independent of
+ * source order — the DOM order stays the mobile-priority order regardless
+ * of viewport.
+ */
+.game-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+/* Sessions + leaderboard always live in their own flex column (so they
+   stack tightly against each other on mobile too); on desktop this column
+   also becomes one grid area, avoiding a dead gap from independent
+   auto-sized grid rows next to a taller game panel. */
+.game-layout-rail {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .game-layout {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    grid-template-areas: "game rail";
+    align-items: start;
+    gap: 1.5rem;
+  }
+  .game-layout-game {
+    grid-area: game;
+  }
+  .game-layout-rail {
+    grid-area: rail;
+  }
+}
+
+.scanlines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.015) 0px,
+    rgba(255, 255, 255, 0.015) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mix-blend-mode: overlay;
+}
